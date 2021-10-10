@@ -9,15 +9,24 @@ struct Cli{
     path: std::path::PathBuf,
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>>{
-    // let args = Cli::from_args();
-    // let content = std::fs::read_to_string(&args.path)
-    //     .expect("Could not read file");
-    // for line in content.lines(){
-    //     if line.contains(&args.pattern){
-    //         println!("{}",line);
-    //     }
+fn main() -> Result<()>{
+    let args = Cli::from_args();
+    let content = std::fs::read_to_string(&args.path)
+        .with_context(|| format!("could not read file `{}`", args.path.display()))?;
+
+    grrs::find_matches(&content, &args.pattern, &mut std::io::stdout());
+
+    Ok(())
+
+    // #[test]
+    // fn find_a_match(){
+    //     let mut result = Vec::new();
+    //     grrs::find_matches("lorem ipsum\ndolor sit amet", "lorem", &mut result);
+    //     assert_eq!(result, b"lorem ipsum\n");
     // }
+
+
+
     // let result = std::fs::read_to_string("test.txt");
     // match result {
     //     Ok(content) => { content;}
@@ -26,9 +35,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>>{
     // }
     // println!("File content: {}", content);
     // Ok(())
-    let path = "a.txt";
-    let content = std::fs::read_to_string(path)
-        .with_context(|| format!("Could not read file `{}`", path))?;
-    println!("File content: {}", content);
-    Ok(())
+    // let path = "a.txt";
+    // let content = std::fs::read_to_string(path)
+    //     .with_context(|| format!("Could not read file `{}`", path))?;
+    // println!("File content: {}", content);
+    // Ok(())
+
+    // use std::io::{self, Write};
+    // let stdout = io::stdout();
+    // let mut handle = io::BufWriter::new(stdout);
+    // writeln!(handle, "Foo: {}", 42);
+
+
 }
